@@ -1,0 +1,4 @@
+"0","library(sf)
+pol <- st_read('data/spatial/predios_villa_baviera.gpkg')"
+"2","/bin/sh: 1: setup: not found
+"

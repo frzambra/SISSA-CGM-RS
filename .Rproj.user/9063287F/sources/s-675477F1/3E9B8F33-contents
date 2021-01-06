@@ -1,0 +1,190 @@
+---
+title: "Estimación de rendimiento en trigo/maíz"
+subtitle: "CGM + Remote Sensing"
+author: "Francisco Zambrano"
+institute: "Hémera, Universidad Mayor"
+date: "6 enero 2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","font-awesome-animation.min.css"]  
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+library(sf)
+pol <- st_read('data/spatial/predios_villa_baviera.gpkg')
+library(xaringanthemer)
+library(xaringanExtra)
+mono_light(title_slide_background_color = 'grey',
+           background_image = 'img/logo_hemera.png',
+           background_size = '10%',
+           background_position = '95% 5%',
+           code_inline_color = 'red',
+           code_font_google =  google_font("Work Sans", "300", "300i"),
+           link_color = 'darkred' )
+xaringanExtra::use_fit_screen()
+xaringanExtra::use_webcam()
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+```
+
+### Reunión SISSA: Interrogantes 
+
+1. Datos de rendimiento/biomasa en trigo
+
+2. Escala de estimación de rendimiento
+
+  - Local?
+  - Regional?
+
+3. Modelo de crecimiento de cultivo (CGMs) a utilizar 
+
+4. Uso de datos satelitales para estimación de rendimiento
+
+---
+### 1. Datos de rendimiento/biomasa en trigo
+
+- En Chile no hay siponibilidad de una base de datos productiva de cultivos a nivel comuna, distrito o local.
+
+- Está la base de datos de ODEPA/INE que se actualiza en base al censo agropecuario 2007 a nivel regional.
+
+- Aún no se actualiza el censo agropecuario.
+
+  - Una buena alternativa para recopilar datos a gran escala.
+  
+- Es necesario desarrollar una BBDD productiva para Chile.
+
+  - Hay datos? Dónde están? qué calidad tienen?
+  
+---
+### 2. Escala de estimación de rendimiento
+
+- La escala está supeditada al modelo a elegir.
+
+- Escala local: 
+  - cuidadosa parametrización
+  - mayor necesidad de computo
+
+- Escala moderada a regional
+  - no representa tan bien la condiciones locales
+  - menor precisión en la estimación
+  - indica patrones 
+  - útil para evaluación de sequía
+
+
+---
+### 3. Crop Growth Models (CGM)
+
+`Jin et al. (2018)`
+
+.center[
+  <img src="./figs/CGMs.png"  width="100%" />
+]
+
+---
+### 3. Crop Growth Models (CGM)
+
+Simple Algorithm for Yield Estimation (SAFY) `(Duchemin et al. 2007)`
+
+- Desarrollado específicamente para aplicaciones con remote sensing.
+
+- Una teoría simple que relaciona la fitomasa total producida con la radiación fotosintéticamente activa (APAR) absorvida por la planta.
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+
+Simple Algorithm for Yield Estimation (**SAFY**) `(Duchemin et al. 2007)`
+
+.center[
+  <img src="./figs/parameters_SAFY.png"  width="100%" />
+]
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+
+Data assimilation `(Huang et al., 2019)`
+
+CGM + Remote Sensing
+
+.center[
+  <img src="./figs/data_assimilation_framework.jpg"  width="70%" />
+]
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+
+Data assimilation `(Huang et al., 2019)`
+
+Varios métodos DA 
+
+1. Aproximación variacional 
+
+2. Filtros de Kalman
+
+3. Bayesian Monte-Carlo
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+
+Data assimilation `(Huang et al., 2019)`
+
+
+.center[
+  <img src="./figs/DA_numerical_weather_forecast.jpg"  width="80%" />
+]
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+
+Ejemplo: Data assimilation + SAFY `(Silvestro et al., 2017)`
+
+Del análisis de sensibibilidad se identificaron 8 parámetros
+
+.center[
+  <img src="./figs/sensible_parameters_SAFY.png"  width="100%" />
+]
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+
+Resultados a nivel local `(Silvestro et al., 2017)`
+
+.center[
+  <img src="./figs/results_SAFY_aquacrop.png"  width="100%" />
+]
+
+
+
+---
+### 4. Uso de datos satelitales para estimación de rendimiento
+ 
+1. La data assimilation con datos satelitales mejora la estimación de rendimiento de los CGM (ej. aquacrop, DSSAT, SAFY)
+
+2. Los resultados de SAFY a escala local con limitado uso de datos satelitales (3/4) mejoró respecto a DA Aquacrop.
+
+3. El bajo costo computacional y cantidad de parámetros necesarios hace de SAFY un CGM candidato interesante de evaular con DA.
+
+---
+### Ensayos en trigo y maíz 2020-2021
+
+```{r echo=FALSE,fig.width=10,message = FALSE}
+library(mapview)
+mapview(pol)
+```
+
+---
+### Referencias
+
+Jin, X., Kumar, L., Li, Z., Feng, H., Xu, X., Yang, G., & Wang, J. (2018). A review of data assimilation of remote sensing and crop models. European Journal of Agronomy, 92, 141–152. https://doi.org/10.1016/j.eja.2017.11.002
+
+Duchemin, B., Maisongrande, P., Boulet, G., & Benhadj, I. (2008). A simple algorithm for yield estimates: Evaluation for semi-arid irrigated winter wheat monitored with green leaf area index. Environmental Modelling and Software. https://doi.org/10.1016/j.envsoft.2007.10.003
+
+Huang, J., Gómez-Dans, J. L., Huang, H., Ma, H., Wu, Q., Lewis, P. E., Liang, S., Chen, Z., Xue, J. H., Wu, Y., Zhao, F., Wang, J., & Xie, X. (2019). Assimilation of remote sensing into crop growth models: Current status and perspectives. In Agricultural and Forest Meteorology (Vols. 276–277, p. 107609). Elsevier B.V. https://doi.org/10.1016/j.agrformet.2019.06.008
+
+Silvestro, P., Pignatti, S., Pascucci, S., Yang, H., Li, Z., Yang, G., Huang, W., & Casa, R. (2017). Estimating Wheat Yield in China at the Field and District Scale from the Assimilation of Satellite Data into the Aquacrop and Simple Algorithm for Yield (SAFY) Models. Remote Sensing, 9(5), 509. https://doi.org/10.3390/rs9050509

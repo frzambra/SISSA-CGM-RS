@@ -1,0 +1,761 @@
+---
+title: "Manejo de Información Geográfica (AGRE1002) "
+subtitle: "Teledetección e Imágenes Aéreas"  
+author: 'Dr. Francisco Zambrano Bigiarini <br> Investigador en <a href="https://hemera.umayor.cl/">Hémera</a> <br> <a href="http://github.com/frzambra"><i class="fa fa-github fa-fw"></i>&nbsp; frzambra</a><br> <a href="http://twitter.com/frzambra"> <i class="fa fa-twitter fa-fw"></i>&nbsp; @frzambra</a><br> <a href="mailto:francisco.zambrano@umayor.cl"><i class="fa fa-paper-plane fa-fw"></i>&nbsp; francisco.zambrano@umayor.cl</a><br>'
+date: "9 noviembre 2020" 
+output:
+  xaringan::moon_reader:
+    #chakra: remark-latest.min.js
+    lib_dir: libs
+    css: ["xaringan-themer.css","font-awesome-animation.min.css"]  
+    nature:
+      countIncrementalSlides: false
+    includes:
+      in_header: header.html        
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(mapview)
+library(xaringanthemer)
+library(xaringanExtra)
+mono_light(title_slide_background_color = 'grey',
+           background_image = 'img/logo_hemera.png',
+           background_size = '10%',
+           background_position = '95% 5%',
+           code_inline_color = 'red',
+           code_font_google =  google_font("Work Sans", "300", "300i"),
+           link_color = 'darkred' )
+xaringanExtra::use_fit_screen()
+xaringanExtra::use_webcam()
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = TRUE  #<<
+)
+```
+
+class: center, middle
+
+# Imágenes Satelitales y Aéreas
+
+---
+# Introducción
+
+- Datos sensados de forma remota
+
+  - Imágenes Aéreas
+  
+  - Imágenes de Satélite
+  
+- Útiles por muchas razones
+
+  - Cubren grandes extensiones
+  
+  - Rango espectral extendido
+  
+  - Precisión geométrica
+  
+  - Registro permanente
+  
+---
+#Ejemplos
+
+```{r echo=FALSE,fig.width=10}
+mapview()@map %>% 
+  leaflet::setView(-72, -36,  zoom = 12) 
+
+```
+---
+#Ejemplos
+
+**Volcan Llaima**
+
+```{r echo=FALSE,fig.width=10}
+
+mapview()@map %>% 
+    leaflet::setView(-71.72, -38.7,  zoom = 12)
+```
+
+---
+# Ejemplos
+
+Liceo El Carmen, San Fernando
+.center[
+  <img src="img/im1.png"  width="530px" />
+]
+
+---
+# Ejemplos
+
+Liceo El Carmen, San Fernando
+
+.center[
+  <img src="img/im2.png"  width="530px" />
+]
+
+---
+# Ejemplos
+
+Liceo El Carmen, San Fernando
+
+.center[
+  <img src="img/im3.png"  width="530px" />
+]
+
+
+---
+# Ejemplos
+
+![](img/fig1.png)
+
+---
+# Ejemplos
+
+![](img/fig2.png)
+
+---
+class: center, middle
+
+# Teledetección
+
+---
+# Principios básicos
+
+- La **teledetección** se basa en la energía electromagnética reflejada
+
+- La energía solar caracterizada por la **longitud de onda**
+
+  - cada `color` tiene una longitud de onda específica.
+  
+  - el rango compleo de longitud de onda se denómina **espectro electromagnético**
+  
+   nuestros ojos perciben la luz en el rango **visible** del espectro
+   
+---
+#Introducción al espectro electromagnético (Videos)
+
+1. [Espectro electromagnetico](https://www.youtube.com/watch?v=ixwxOQf50kc&t=106s)
+
+2. [La luz visible](https://www.youtube.com/watch?v=YCWvxv__nmQ)
+
+3. [Infrarojo](https://www.youtube.com/watch?v=8ybXNZQGzSQ)
+
+---
+# Espectro electromagnético
+
+![](img/fig3.png)
+
+---
+# Espectro electromagnético
+
+![](img/EspectroElectromagnetico.png)
+---
+# Principios básicos teledetección
+
+1. Energía electromagnética que golpea un objeto puede ser **absorvida**, **reflejada** o **transmitida**
+
+2. Los objetos se ven como el color que deben **reflejar**.
+
+3. Los objetos además reflejan otras porciones del espectro.
+
+---
+# Curva espectral vegetación sana
+
+  <img src="img/veg-reflect.png"  width="700px" />
+
+---
+# Curva espectral vegetación sana
+
+  <img src="img/leaf-reflected-infrared.png"  width="700px" />
+
+---
+# Ejemplo
+
+.center[
+  <img src="img/rgb.png"  width="530px" />
+]
+
+
+---
+# Ejemplo
+
+.center[
+  <img src="img/falso_color.png"  width="530px" />
+]
+---
+# Sistemas de teledetección **activos** y **pasivos**
+
+![](img/fig4.png)
+---
+# Sistemas **pasivos**
+
+  - Los sistemas pasivos pueden ser afectados por las condiciones atmosféricas
+  
+  - La mayoria de los sistemas se basan en la energía del sol
+  
+  - No traspasan las nubes
+  
+---
+# Sistemas **activos**
+
+  - Generan su propia señal de energía y registran la energía que retorna
+  
+  - Los sitemas activos pueden recolectar en el día o la noche, y traspasan las nubes.
+
+--
+
+¿Cuál es un conocido sistema de teledetección activo? 
+
+---
+# Sistemas **activos**
+
+## Radar
+
+El radar es un sistema activo, que ilumina la superficie terrestre y mide la señal reflejada.
+
+  - El más común de los sistemas activos
+  
+  - Los sistemas de radas están comunmente restringidos a una longitud de onda.
+  
+  - Produce imágenes monocromáticas.
+  
+---
+# Sistemas **activos**
+
+## Radar
+
+.center[
+  <img src="img/fig5.png"  width="600px" />
+]
+
+
+---
+# Sistemas **activos**
+
+## Radar
+
+.center[
+  <img src="img/fig6.jpg"  width="650px" />
+]
+
+
+---
+# Sistemas **activos**
+
+## Radar
+
+.center[
+  <img src="img/fig7.png"  width="650px" />
+]
+
+---
+# Sistemas **activos**
+
+## LiDAR
+
+Light Detecttion and ranging (LiDAR)
+
+(sistema de detección y medición de objetos mediante laser)
+
+- Cada vez más popular
+
+- Envia pulsos laser para detectar un rango a un objeto distante
+
+- Mucho mayor resolución que **radar**
+
+  - usa haces de luz más enfocados
+  
+---
+# Sistemas **activos**
+
+## LiDAR
+
+[https://www.youtube.com/watch?v=lnpBb_yU9U4&t=35s](https://www.youtube.com/watch?v=lnpBb_yU9U4&t=35s)
+
+---
+# Sistemas **activos**
+
+.center[
+  <img src="img/fig8.png"  width="700px" />
+]
+
+---
+class: center, middle
+
+# Imágenes aéreas y Drones (UAV)
+
+---
+# Imágenes aéreas
+
+- Las imágenes aéreas han sido una fuente importante de información geográfica
+
+  - Comenzaron al mismo tiempo que las camaras portables
+  
+  - Se hicieron prácticas con la invención de los aeroplanos.
+  
+- Fotogrametría: ciencia de de medir geometria desde imágenes
+
+---
+# Imágenes aéreas
+
+.center[
+  <img src="img/fig9.png"  width="450px" />
+]
+
+---
+# Imágenes aéreas
+
+.center[
+  <img src="img/fig10.png"  width="600px" />
+]---
+# Imágenes aéreas
+
+.center[
+  <img src="img/fig11.png"  width="400px" />
+]
+
+---
+# Imágenes aéreas
+
+.center[
+  <img src="img/fig12.png"  width="600px" />
+]
+---
+# Imágenes aéreas
+
+.center[
+  <img src="img/fig13.png"  width="500px" />
+]
+
+---
+# Imágenes aéreas
+
+.center[
+![](img/fig14.jpg)
+]
+
+---
+# Imágenes aéreas
+
+.center[
+![](img/fig15.png)
+]
+
+---
+#Imágenes aéreas - atributos
+
+- En un principio se utilizaban camaras análogas con rollo (film)
+
+- luego se comenzo a utilizar camaras digitales, en vez de un rollo (film) se basan en el sistema CCD.
+
+- Hoy en día los drones pueden tener camaras multiespectrales
+
+---
+# Imágenes aéreas - Camaras digitales
+
+- Utilizan el sistema CCD (charge coupled device) o similar.
+
+  - El CCD es un sistema rectangular de pixeles que responde a la luz
+  
+- Multiples CCD se pueden utilizar con uno o multiples lentes
+
+---
+# Imágenes aéreas - Camaras digitales
+
+.center[
+  <img src="img/fig16.png"  width="600px" />
+]
+
+---
+## Imágenes aéreas - Sensores multiespectrales
+
+**Parrot Sequoia**
+
+[https://www.youtube.com/watch?time_continue=137&v=SaztuWuDEsg&feature=emb_logo](https://www.youtube.com/watch?time_continue=137&v=SaztuWuDEsg&feature=emb_logo)
+
+---
+class: center, middle
+
+# Calidad de una imágen aérea
+
+---
+# Calidad geométrica de una imágen aérea
+
+- Todas las imágenes aéreas tienen distorción geométrica
+
+- Ortofóto: posición del objeto despues de ser proyectado a un plano
+
+  - equivalente a mirar verticalmente una escena desde una altura infinita
+  
+- la mayoría de las fotos aéreas no proveen una vista ortofotográfica, sino que una vista en perspectiva, la que es una visión distorsionada de la imagen de la tierra.
+
+---
+# Calidad geométrica de una imágen aérea
+
+.center[
+  <img src="img/fig17.jpg"  width="600px" />
+]
+
+---
+# Calidad geométrica de una imágen aérea
+
+Cinco principales fuentes de distorsión
+
+1. terreno: error mayor
+
+2. inclinación de la camara: error mayor
+
+3. Lente de la camara: error menor
+
+4. refracción atmosférica: error menor
+
+5. otros errores de camara: error menor
+
+---
+# Distorsión de terreno
+
+- La variación del terreno es generalmente la mayor fuente de distorisón geométrica
+
+- Produce desplaciamiento del relieve
+
+---
+# Distorsión de terreno
+
+.center[
+  <img src="img/fig18.png"  width="600px" />
+]
+
+---
+# Distorsión de terreno
+
+.center[
+  <img src="img/fig19.png"  width="600px" />
+]
+
+---
+# Distorsión de terreno
+
+- Las distorsiones de terreno son radiales.
+
+- La distorsión de relieve afecta angulos y distancias en una imágene aérea.
+
+- La escala no es constante en una imágene aérea
+
+- Una imágene aérea tomada vertical sobre el terreno no es **ortofotográfica**
+
+---
+# Distorsión por inclinación de la camara
+
+- Es cuando el eje de la camara no se encuentra en un angulo vertical
+
+- Resulta en una compleja convergencia de perspectiva
+
+---
+# Distorsión por inclinación de la camara
+
+.center[
+  <img src="img/fig20.png"  width="150px" />
+]
+
+---
+# Otros errores
+
+- Desplazamiento radial del lente: imperfección en la superficie de la camara del lente
+
+- Error sistemático: patron deformado
+
+- Errores atmosféricos: reflexión de la luz
+
+---
+# Corrección geométrica
+
+- La fotogrametríca proporciona herramientas para realizar corrección geométrica.
+
+- El proceso de corrección requiere medir las coordenadas de la imágen y sus correspondientes coordenadas en terreno.
+
+- **Resultado final:** imágen ortorectificada- una imágen con corrección de distorsión de terreno y perspectiva.
+
+---
+# Ortorectificación
+
+![](img/fig21.png)
+
+---
+class: center, middle
+
+# Usos de las imágenes aéreas
+
+---
+
+# Principales usos
+
+- La base para la agromensura y mapeo topográfico
+
+  - Mide X, Y, Z
+  
+- Foto interpretación
+
+  - Categorizar o asignar atributos a objetos/lugares en la superficie
+  
+- Usadas como mapa de fondo (referencia)
+
+- Monitoreo agrícola
+
+  - Estado de la vegetación - enfermedades
+  
+  - conteo de plantas
+  
+  - estado hídrico
+  
+  - ..... y mucho más
+
+---
+# Fotointerpretación
+
+- **Fotointerpretación:** el proceso de convertir las imágenes en información
+
+- Los interpretes utilizan:
+  
+  - tamaño
+  - forma
+  - color
+  - brillo
+  - textura
+  - ubicación relativa y absoluta
+
+para interpretar las imágenes
+
+---
+# Fotointerpretación
+
+tamaño, forma, color, brillo, textura, ubicación relativa y absoluta
+
+.center[
+  <img src="img/fig22.png"  width="350px" />
+  <img src="img/fig23.png"  width="350px" />
+]
+
+---
+# Fotointerpretación
+
+- Para hacer uso adecuado de las características de la imagen, el interprete debe estar familiarizado con el objeto/lugar de interés.
+
+- La imágenes foto interpretadas son comunmente comparadas con lo que se encuentra en terreno. (verdad de terreno)
+
+---
+# Fotointerpretación
+
+- El resultado más común son la creación de mapas temáticos
+
+- Se requiere la asignación de categorías para los objetos interpretados.
+
+- Se requiere una unidad de mapa mínimo (UMM)
+
+---
+class: center, middle
+
+# Imágenes Satelitales
+
+---
+
+# Imágenes satelitales
+
+- concepto similar a las imágenes aéreas
+
+- Tiene los mismo usos
+
+  - Base para crear mapas
+  
+  - Interpretación de imágenes
+  
+  - Como mapa de referencia
+  
+- ... pero hay algunas diferencias importantes
+
+---
+# ¿En qué difieren?
+
+- Perspectiva desde muy arriba
+
+  - reduce la distorsión de terreno
+  
+- Cubren grandes superficies
+  - costo muy alto para superficies pequeñas
+  
+- Requieren procesamiento especializado de imágenes
+
+- Programar la adquisición de imágene se debe realizar con días o semanas de anticipación
+  
+  -O seguir los cronogramas de vuelos fijos
+
+- Menor resolución efectiva
+
+---
+# ¿En qué difieren?
+
+Dos tipos de imágenes satelitales
+
+- Públicas: 
+
+  - Landsat, 
+    
+  - Sentinel, 
+    
+  - MODIS
+
+- Privadas: 
+
+  - Ikonos, 
+
+  - Worldview
+  
+---
+# Principios básicos
+
+- Los sensores en los satelites operan apuntando al área a ser tomada
+  
+  - Vista instantane del campo (VIC): corresonde al área que puede ser vista por cada sensor.
+
+- Los sensores construyen imágenes 2D de la superficie al registrar la energía reflejada
+
+---
+# Landsat (USGS/NASA)
+
+- Lanzado en Julio 1972 (Landsat-1)
+
+- Primer sistema diseñado para adquirir datos de la superficie de la tierra.
+
+- Tres sensores abordo
+
+  - Cámara de video
+  
+  - sensor multiespectral
+  
+  - mapeador temático (thematic mapper)
+  
+  - mapeador temático mejorado (enhanced thematic mapper)
+
+- Revisita cada 16 días.
+
+- Resolución espacial de 15/30/100m
+
+---
+# Landsat (USGS/NASA)
+ 
+ .center[
+  <img src="img/fig24.jpg"  width="750px" />
+]
+
+---
+# Landsat (USGS/NASA)
+ 
+ .center[
+  <img src="img/fig25.jpg"  width="750px" />
+]
+
+---
+# Landsat (USGS/NASA - USA)
+
+Embalse el Yeso
+
+ .center[
+  <img src="img/fig26.png"  width="750px" />
+]
+
+---
+
+# Sentinel (ESA - Europa)
+
+ .center[
+  <img src="img/fig27.jpg"  width="750px" />
+]
+
+---
+# Sentinel 2 (A/B)
+
+- Sentinel A lanzado 23 Junio 2015
+
+- Sentinel B lanzado 7 Marzo 2017
+
+- Cuentan con un sensor multiespectral (MSI)
+
+- Cada satelite captura imágenes cada 10 días, en conjunto la revisita es de 5 días.
+
+- Resolución espacial 10/20/60 m
+
+---
+# Sentinel 2 (A/B)
+
+ .center[
+  <img src="img/fig28.png"  width="750px" />
+]
+
+---
+# Sentinel 2 (A/B)
+
+ .center[
+  <img src="img/fig29.png"  width="750px" />
+]
+
+
+---
+# Sentinel 2A
+
+Taller 2: 18 abril 2020
+
+ .center[
+  <img src="img/fig30.png"  width="450px" />
+]
+
+---
+# Worldview 4
+
+
+- Bandas:
+
+  - Pancromática: 450 - 800nm
+  - Red: 655 - 690 nm, 
+  - Green: 510 - 580 nm
+  - Blue: 450 - 510 nm
+  - Near-IR: 780-920
+  
+- Resolución espacial entre 0.31 a 4m
+
+- Costo 22.5 $USD/km^2$
+
+- Mínima superficie: 25 $km^2$
+
+- Datos de archivo
+
+---
+# Worldview 4
+
+
+ .center[
+  <img src="img/fig31.jpg"  width="650px" />
+]
+
+---
+# ¿Cuál usar? ¿satelital o aérea?
+
+Considerar los siguientes factores:
+
+- Resolución espacial
+
+- La superficie del área a analizar
+
+- Costo
+
+- Limitaciones de tiempo
+
+- Post-proceso
+
+- Requerimientos espectrales
+
+
+
+
+
+

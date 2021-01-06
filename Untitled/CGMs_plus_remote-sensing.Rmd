@@ -1,0 +1,43 @@
+---
+title: "Estimación de rendimiento en trigo"
+subtitle: "CGM + Remote Sensing"
+author: "Francisco Zambrano"
+institute: "Hémera, Universidad Mayor"
+date: "2021/01/06"
+output:
+  xaringan::moon_reader:
+    css: [default, zh-CN.css]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## Interrogantes 
+
+1. Datos de rendimiento/biomasa en trigo
+
+2. Escala de estimación de rendimiento
+
+  - Local?
+  - Regional?
+  
+3. Uso de datos satelitales para estimación de rendimiento
+
+---
+## Crop Growth Models (CGM)
+
+`Jin et al. (2018)`
+
+.center[
+  <img src="./figs/CGMs.png"  width="100%" />
+]
+
+
+---
+# Referencias
+
+Jin, X., Kumar, L., Li, Z., Feng, H., Xu, X., Yang, G., & Wang, J. (2018). A review of data assimilation of remote sensing and crop models. European Journal of Agronomy, 92, 141–152. https://doi.org/10.1016/j.eja.2017.11.002
+
+
